@@ -15,6 +15,10 @@
 		914FBF9423DE22A30036017C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 914FBF9223DE22A30036017C /* LaunchScreen.storyboard */; };
 		916DB4C92415FA09002C3AF4 /* AddReminderTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DB4C82415FA09002C3AF4 /* AddReminderTableViewController.swift */; };
 		916DB4D3242B0E2A002C3AF4 /* Notification.Name+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DB4D2242B0E2A002C3AF4 /* Notification.Name+Extensions.swift */; };
+		916DB4D9246D0876002C3AF4 /* HabitTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DB4D8246D0876002C3AF4 /* HabitTableViewController.swift */; };
+		916DB4DB246D0896002C3AF4 /* AddHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DB4DA246D0896002C3AF4 /* AddHabitViewController.swift */; };
+		916DB4DE246D0B93002C3AF4 /* Habit+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DB4DC246D0B93002C3AF4 /* Habit+CoreDataClass.swift */; };
+		916DB4DF246D0B93002C3AF4 /* Habit+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DB4DD246D0B93002C3AF4 /* Habit+CoreDataProperties.swift */; };
 		917C6B1624135D0F0059E7D2 /* InTouch.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 917C6B1424135D0F0059E7D2 /* InTouch.xcdatamodeld */; };
 		917C6B3B241368FA0059E7D2 /* PersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917C6B3A241368FA0059E7D2 /* PersistenceService.swift */; };
 		919B26E6240F785700EEB648 /* ReminderTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919B26E5240F785700EEB648 /* ReminderTableViewController.swift */; };
@@ -33,6 +37,10 @@
 		914FBF9523DE22A30036017C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		916DB4C82415FA09002C3AF4 /* AddReminderTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReminderTableViewController.swift; sourceTree = "<group>"; };
 		916DB4D2242B0E2A002C3AF4 /* Notification.Name+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification.Name+Extensions.swift"; sourceTree = "<group>"; };
+		916DB4D8246D0876002C3AF4 /* HabitTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitTableViewController.swift; sourceTree = "<group>"; };
+		916DB4DA246D0896002C3AF4 /* AddHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddHabitViewController.swift; sourceTree = "<group>"; };
+		916DB4DC246D0B93002C3AF4 /* Habit+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Habit+CoreDataClass.swift"; sourceTree = "<group>"; };
+		916DB4DD246D0B93002C3AF4 /* Habit+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Habit+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		917C6B1524135D0F0059E7D2 /* InTouch.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = InTouch.xcdatamodel; sourceTree = "<group>"; };
 		917C6B3A241368FA0059E7D2 /* PersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceService.swift; sourceTree = "<group>"; };
 		919B26E5240F785700EEB648 /* ReminderTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderTableViewController.swift; sourceTree = "<group>"; };
@@ -54,6 +62,8 @@
 		914FBF7923DE22A10036017C = {
 			isa = PBXGroup;
 			children = (
+				916DB4DC246D0B93002C3AF4 /* Habit+CoreDataClass.swift */,
+				916DB4DD246D0B93002C3AF4 /* Habit+CoreDataProperties.swift */,
 				91E8ABAA24137813005CC319 /* Reminder+CoreDataClass.swift */,
 				91E8ABAB24137813005CC319 /* Reminder+CoreDataProperties.swift */,
 				914FBF8423DE22A10036017C /* InTouch */,
@@ -77,6 +87,8 @@
 				914FBF8723DE22A10036017C /* SceneDelegate.swift */,
 				914FBF8923DE22A10036017C /* FirstViewController.swift */,
 				914FBF8D23DE22A10036017C /* Main.storyboard */,
+				916DB4D8246D0876002C3AF4 /* HabitTableViewController.swift */,
+				916DB4DA246D0896002C3AF4 /* AddHabitViewController.swift */,
 				917C6B1424135D0F0059E7D2 /* InTouch.xcdatamodeld */,
 				916DB4C82415FA09002C3AF4 /* AddReminderTableViewController.swift */,
 				919B26E5240F785700EEB648 /* ReminderTableViewController.swift */,
@@ -161,13 +173,17 @@
 			files = (
 				91E8ABAC24137813005CC319 /* Reminder+CoreDataClass.swift in Sources */,
 				916DB4D3242B0E2A002C3AF4 /* Notification.Name+Extensions.swift in Sources */,
+				916DB4D9246D0876002C3AF4 /* HabitTableViewController.swift in Sources */,
 				914FBF8A23DE22A10036017C /* FirstViewController.swift in Sources */,
 				917C6B1624135D0F0059E7D2 /* InTouch.xcdatamodeld in Sources */,
 				91E8ABAD24137813005CC319 /* Reminder+CoreDataProperties.swift in Sources */,
+				916DB4DF246D0B93002C3AF4 /* Habit+CoreDataProperties.swift in Sources */,
 				914FBF8623DE22A10036017C /* AppDelegate.swift in Sources */,
+				916DB4DB246D0896002C3AF4 /* AddHabitViewController.swift in Sources */,
 				914FBF8823DE22A10036017C /* SceneDelegate.swift in Sources */,
 				917C6B3B241368FA0059E7D2 /* PersistenceService.swift in Sources */,
 				919B26E6240F785700EEB648 /* ReminderTableViewController.swift in Sources */,
+				916DB4DE246D0B93002C3AF4 /* Habit+CoreDataClass.swift in Sources */,
 				916DB4C92415FA09002C3AF4 /* AddReminderTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

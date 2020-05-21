@@ -121,7 +121,6 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
     @objc func keyboardWillChange(notification: Notification) {
         if notification.name == UIApplication.keyboardWillShowNotification || notification.name == UIApplication.keyboardWillChangeFrameNotification {
             view.frame.origin.y = -everyTimePicker.frame.height + self.tabBarController!.tabBar.frame.size.height
-            
         } else {
             view.frame.origin.y = 0
         }
