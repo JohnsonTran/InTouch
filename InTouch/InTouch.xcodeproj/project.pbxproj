@@ -24,6 +24,9 @@
 		919B26E6240F785700EEB648 /* ReminderTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919B26E5240F785700EEB648 /* ReminderTableViewController.swift */; };
 		91E8ABAC24137813005CC319 /* Reminder+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E8ABAA24137813005CC319 /* Reminder+CoreDataClass.swift */; };
 		91E8ABAD24137813005CC319 /* Reminder+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E8ABAB24137813005CC319 /* Reminder+CoreDataProperties.swift */; };
+		91F935F82477427B009D3203 /* TrackRecordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F935F72477427B009D3203 /* TrackRecordTableViewController.swift */; };
+		91F935FA2479C0A7009D3203 /* WorkRecordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F935F92479C0A7009D3203 /* WorkRecordTableViewController.swift */; };
+		91F935FC2479D3C5009D3203 /* TrackRecordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F935FB2479D3C5009D3203 /* TrackRecordCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +49,9 @@
 		919B26E5240F785700EEB648 /* ReminderTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderTableViewController.swift; sourceTree = "<group>"; };
 		91E8ABAA24137813005CC319 /* Reminder+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reminder+CoreDataClass.swift"; sourceTree = "<group>"; };
 		91E8ABAB24137813005CC319 /* Reminder+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reminder+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		91F935F72477427B009D3203 /* TrackRecordTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRecordTableViewController.swift; sourceTree = "<group>"; };
+		91F935F92479C0A7009D3203 /* WorkRecordTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkRecordTableViewController.swift; sourceTree = "<group>"; };
+		91F935FB2479D3C5009D3203 /* TrackRecordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRecordCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,9 +92,12 @@
 				914FBF8523DE22A10036017C /* AppDelegate.swift */,
 				914FBF8723DE22A10036017C /* SceneDelegate.swift */,
 				914FBF8923DE22A10036017C /* FirstViewController.swift */,
+				91F935F92479C0A7009D3203 /* WorkRecordTableViewController.swift */,
 				914FBF8D23DE22A10036017C /* Main.storyboard */,
 				916DB4D8246D0876002C3AF4 /* HabitTableViewController.swift */,
 				916DB4DA246D0896002C3AF4 /* AddHabitViewController.swift */,
+				91F935F72477427B009D3203 /* TrackRecordTableViewController.swift */,
+				91F935FB2479D3C5009D3203 /* TrackRecordCell.swift */,
 				917C6B1424135D0F0059E7D2 /* InTouch.xcdatamodeld */,
 				916DB4C82415FA09002C3AF4 /* AddReminderTableViewController.swift */,
 				919B26E5240F785700EEB648 /* ReminderTableViewController.swift */,
@@ -172,9 +181,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				91E8ABAC24137813005CC319 /* Reminder+CoreDataClass.swift in Sources */,
+				91F935FC2479D3C5009D3203 /* TrackRecordCell.swift in Sources */,
 				916DB4D3242B0E2A002C3AF4 /* Notification.Name+Extensions.swift in Sources */,
 				916DB4D9246D0876002C3AF4 /* HabitTableViewController.swift in Sources */,
 				914FBF8A23DE22A10036017C /* FirstViewController.swift in Sources */,
+				91F935F82477427B009D3203 /* TrackRecordTableViewController.swift in Sources */,
 				917C6B1624135D0F0059E7D2 /* InTouch.xcdatamodeld in Sources */,
 				91E8ABAD24137813005CC319 /* Reminder+CoreDataProperties.swift in Sources */,
 				916DB4DF246D0B93002C3AF4 /* Habit+CoreDataProperties.swift in Sources */,
@@ -185,6 +196,7 @@
 				919B26E6240F785700EEB648 /* ReminderTableViewController.swift in Sources */,
 				916DB4DE246D0B93002C3AF4 /* Habit+CoreDataClass.swift in Sources */,
 				916DB4C92415FA09002C3AF4 /* AddReminderTableViewController.swift in Sources */,
+				91F935FA2479C0A7009D3203 /* WorkRecordTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -47,6 +47,9 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
     
     var wasTerminated: Bool!  // keep track if the user terminated the app while the timer is running to fix the accuracy of the timer
     
+    var workRecord: [Double]!
+    var firstDateLogIn: Date!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(pauseWhenBackground(noti:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
@@ -108,6 +111,31 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
             counter = UserDefaults.standard.double(forKey: "counter")
             displayTime(timeInSecs: counter)
         }
+        
+        // check if the user is new and set the date they first logged in and workRecord
+        // used to keep track of the work sessions
+        firstDateLogIn = UserDefaults.standard.object(forKey: "firstDateLogIn") as? Date
+        if firstDateLogIn == nil {
+            firstDateLogIn = Date()
+            UserDefaults.standard.set(firstDateLogIn, forKey: "firstDateLogIn")
+            workRecord = [0]
+            UserDefaults.standard.set(workRecord, forKey: "workRecord")
+        }
+        
+        workRecord = UserDefaults.standard.object(forKey: "workRecord") as? [Double]
+        // add days to the workRecord when it is a new day
+        if workRecord != nil {
+            if let lastTimeLogIn = UserDefaults.standard.object(forKey: "workLastTimeLogIn") as? Date {
+                let timeDiff = Date().interval(ofComponent: .day, fromDate: lastTimeLogIn)
+                var day = 0
+                while day < timeDiff {
+                    workRecord.append(0)
+                    day += 1
+                }
+            }
+            UserDefaults.standard.set(Date(), forKey: "workLastTimeLogIn")
+        }
+        
     }
     
     deinit {
@@ -188,6 +216,9 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
     
     // resets the timer when the reset button is pressed
     @IBAction func resetDidTap(_ sender: Any) {
+        if counter > 0 {
+            workSessionAlert(time: counter)
+        }
         timer.invalidate()
         isTimerRunning = false
         UserDefaults.standard.set(false, forKey: "isTimerRunning")
@@ -195,10 +226,35 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
         UserDefaults.standard.set(counter, forKey: "counter")
         startPauseButton.setTitle("Start", for: .normal)
         time.text = "00:00"
-        
         removeAllBreakNotifications()
     }
     
+    // sends alert to ask the user if they want to save the work session they had to the workRecord
+    func workSessionAlert(time: Double) {
+        let alert = UIAlertController(title: "Add Work Session", message: "Do you want to save this work session?", preferredStyle: UIAlertController.Style.alert)
+        
+        let no = UIAlertAction(title: "No", style: .default) { (alertAction) in }
+        alert.addAction(no)
+        
+        let yes = UIAlertAction(title: "Yes", style: .default) { (alertAction) in
+            self.workRecord[self.workRecord.count - 1] += time
+            UserDefaults.standard.set(self.workRecord, forKey: "workRecord")
+        }
+        alert.addAction(yes)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    // view the work record
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showWorkRecordSegue" {
+            let temp = segue.destination as! UITableViewController
+            let viewController = temp as! WorkRecordTableViewController
+            viewController.workRecord = workRecord
+            viewController.startDate = firstDateLogIn
+        }
+    }
+       
     // starts the timer
     func startTimer() {
         if !isTimerRunning {
@@ -316,7 +372,7 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
     // display the time based on the counter
     func displayTime(timeInSecs: Double) {
         // HH:MM:SS
-        let flooredCounter = Int(counter)
+        let flooredCounter = Int(timeInSecs)
         let hour = flooredCounter / 3600
         let minute = (flooredCounter % 3600) / 60
         var minuteString = "\(minute)"

@@ -36,6 +36,7 @@ class HabitCell: UITableViewCell {
 class HabitTableViewController: UITableViewController, HabitCellDelegate {
     
     var habits = [Habit]()
+    var habitToView: Habit!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,9 +61,11 @@ class HabitTableViewController: UITableViewController, HabitCellDelegate {
                 }
                 day += 1
             }
+            PersistenceService.saveContext()
         }
         
         UserDefaults.standard.set(Date(), forKey: "lastTimeLogIn")
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -71,10 +74,6 @@ class HabitTableViewController: UITableViewController, HabitCellDelegate {
     }
 
     // MARK: - Table view data source
-//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//
-//    }
-    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -95,18 +94,15 @@ class HabitTableViewController: UITableViewController, HabitCellDelegate {
         let habit = habits[indexPath.row]
         cell.habitNameLabel.text = habit.name
         cell.habitNameLabel.textAlignment = .center
+        cell.habitNameLabel.sizeToFit()
         cell.progressLabel.text = "\(habit.recordTrack![habit.recordTrack!.count - 1]) / \(habit.goal) \(habit.units!)"
         cell.progressLabel.sizeToFit()
         cell.progressLabel.textAlignment = .center
-        cell.selectionStyle = .none
-        cell.addButton.tag = indexPath.row
-        cell.subtractButton.tag = indexPath.row
         return cell
     }
     
     // sends an alert pop up that asks the user to input an amount to add/subtract to the habit for the day and updates the habit
     func changeHabitAlert(_ cell: HabitCell, _ add: Bool) {
-                
         let alert = UIAlertController(title: "Change Habit", message: "How much do you want to add/subtract?", preferredStyle: UIAlertController.Style.alert)
         
         let cancel = UIAlertAction(title: "Cancel", style: .default) { (alertAction) in }
@@ -123,7 +119,6 @@ class HabitTableViewController: UITableViewController, HabitCellDelegate {
                     } else {
                         habitTrack[habitTrack.count - 1] -= input
                     }
-                    print(habitTrack, Date())
                     self.habits[indexPath!.row].recordTrack = habitTrack
                     PersistenceService.saveContext()
                     self.tableView.reloadData()
@@ -155,14 +150,25 @@ class HabitTableViewController: UITableViewController, HabitCellDelegate {
         }
     }
     
-    // allow the user to edit the existing reminders in the tableView
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//
-//    }
+    // allows the user to look at their track record for the habit
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        habitToView = habits[indexPath.row]
+        self.performSegue(withIdentifier: "viewTrackRecordSegue", sender: self)
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+    }
     
+    // view the track record
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "viewTrackRecordSegue" {
+            let temp = segue.destination as! UITableViewController
+            let viewController = temp as! TrackRecordTableViewController
+            viewController.habit = habitToView
+        }
+    }
     
     // gets the habit that was created and display it in the habits list
-    @IBAction func unwindToReminderList(sender: UIStoryboardSegue) {
+    @IBAction func unwindToHabitList(sender: UIStoryboardSegue) {
         if let sourceView = sender.source as? AddHabitViewController, let habit = sourceView.habit {
             habits.append(habit)
             let newIndexPath = NSIndexPath(row: habits.count - 1, section: 0)
@@ -187,9 +193,10 @@ class HabitTableViewController: UITableViewController, HabitCellDelegate {
 extension Date {
     // determines the amount of calendar days in between 2 dates
     func interval(ofComponent comp: Calendar.Component, fromDate date: Date) -> Int {
-        guard let beg = Calendar.current.ordinality(of: comp, in: .era, for: date) else { return 0 }
-        guard let end = Calendar.current.ordinality(of: comp, in: .era, for: self) else {
-            return 0 }
+        let timeZoneOffset = TimeZone.current.secondsFromGMT()
+        // get day differences accounting for time zones
+        guard let beg = Calendar.current.ordinality(of: comp, in: .era, for: date.addingTimeInterval(TimeInterval(timeZoneOffset))) else { return 0 }
+        guard let end = Calendar.current.ordinality(of: comp, in: .era, for: self.addingTimeInterval(TimeInterval(timeZoneOffset))) else { return 0 }
         return end - beg
     }
 }
