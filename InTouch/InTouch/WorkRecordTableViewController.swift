@@ -46,6 +46,7 @@ class WorkRecordTableViewController: UITableViewController {
         cell.dateLabel.sizeToFit()
         cell.progressLabel.text = displayTime(timeInSecs: workRecord[workRecord.count - 1 - indexPath.row])
         cell.progressLabel.sizeToFit()
+        cell.selectionStyle = .none
         return cell
     }
     

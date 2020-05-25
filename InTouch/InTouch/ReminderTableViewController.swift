@@ -70,6 +70,10 @@ class ReminderTableViewController: UITableViewController {
                     reminderList[2].append(remind)
                 }
             }
+            // sorts the reminders in temporal order
+            for section in 0...2 {
+                reminderList[section] = reminderList[section].sorted(by: { $0.time!.compare($1.time!) == .orderedAscending } )
+            }
                         
         } catch {
             print("error")
@@ -161,7 +165,7 @@ class ReminderTableViewController: UITableViewController {
         editReminder = nil
         
     }
-    
+    // MARK: - Navigation
     // edit the addReminderTableViewController with current info
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(editReminder != nil) {
@@ -209,31 +213,6 @@ class ReminderTableViewController: UITableViewController {
             
         }
     }
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 
 }

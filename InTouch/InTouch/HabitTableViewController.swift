@@ -197,6 +197,8 @@ extension Date {
         // get day differences accounting for time zones
         guard let beg = Calendar.current.ordinality(of: comp, in: .era, for: date.addingTimeInterval(TimeInterval(timeZoneOffset))) else { return 0 }
         guard let end = Calendar.current.ordinality(of: comp, in: .era, for: self.addingTimeInterval(TimeInterval(timeZoneOffset))) else { return 0 }
+        print(beg)
+        print(end)
         return end - beg
     }
 }

@@ -49,6 +49,7 @@ class TrackRecordTableViewController: UITableViewController {
         cell.dateLabel.sizeToFit()
         cell.progressLabel.text = "\(String(habit.recordTrack![habit.recordTrack!.count - 1 - indexPath.row])) \(habit.units!)"
         cell.progressLabel.sizeToFit()
+        cell.selectionStyle = .none
         return cell
     }
 

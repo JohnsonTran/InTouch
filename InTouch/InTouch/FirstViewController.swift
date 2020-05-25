@@ -74,12 +74,14 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
         everyTimePicker.addTarget(self, action: #selector(dateChanged(datePicker:)), for: .valueChanged)
         breakIntervalTextField.inputView = everyTimePicker
         
+        // add bottom line to break interval text field
         let bottomLine = CALayer()
         bottomLine.frame = CGRect(x: 0.0, y: breakIntervalTextField.frame.height - 1, width: breakIntervalTextField.frame.width, height: 1.0)
         bottomLine.backgroundColor = UIColor.black.cgColor
         breakIntervalTextField.borderStyle = UITextField.BorderStyle.none
         breakIntervalTextField.layer.addSublayer(bottomLine)
         
+        // display the break interval
         breakInterval = UserDefaults.standard.double(forKey: "breakInterval")
         if(breakInterval != 0) {
             let hour: Int = Int(breakInterval) / 3600
@@ -118,23 +120,24 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
         if firstDateLogIn == nil {
             firstDateLogIn = Date()
             UserDefaults.standard.set(firstDateLogIn, forKey: "firstDateLogIn")
-            workRecord = [0]
+            workRecord = [0.0]
             UserDefaults.standard.set(workRecord, forKey: "workRecord")
         }
         
         workRecord = UserDefaults.standard.object(forKey: "workRecord") as? [Double]
         // add days to the workRecord when it is a new day
-        if workRecord != nil {
-            if let lastTimeLogIn = UserDefaults.standard.object(forKey: "workLastTimeLogIn") as? Date {
-                let timeDiff = Date().interval(ofComponent: .day, fromDate: lastTimeLogIn)
-                var day = 0
-                while day < timeDiff {
-                    workRecord.append(0)
-                    day += 1
-                }
+        if let lastTimeLogIn = UserDefaults.standard.object(forKey: "workLastTimeLogIn") as? Date {
+            let timeDiff = Date().interval(ofComponent: .day, fromDate: lastTimeLogIn)
+            print(timeDiff)
+            var day = 0
+            while day < timeDiff {
+                workRecord.append(0.0)
+                day += 1
             }
-            UserDefaults.standard.set(Date(), forKey: "workLastTimeLogIn")
+            UserDefaults.standard.set(workRecord, forKey: "workRecord")
         }
+        UserDefaults.standard.set(Date(), forKey: "workLastTimeLogIn")
+        print(workRecord!)
         
     }
     
