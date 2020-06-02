@@ -151,19 +151,20 @@ class HabitTableViewController: UITableViewController, HabitCellDelegate {
     }
     
     // allows the user to look at their track record for the habit
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         habitToView = habits[indexPath.row]
         self.performSegue(withIdentifier: "viewTrackRecordSegue", sender: self)
         tableView.deselectRow(at: indexPath, animated: true)
-        
+        return indexPath
     }
     
     // view the track record
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "viewTrackRecordSegue" {
-            let temp = segue.destination as! UITableViewController
-            let viewController = temp as! TrackRecordTableViewController
-            viewController.habit = habitToView
+            let viewController = segue.destination as! TrackRecordAndGraphViewController
+            viewController.workRecord = habitToView.recordTrack
+            viewController.startDate = habitToView.startDate
+            viewController.units = habitToView.units
         }
     }
     

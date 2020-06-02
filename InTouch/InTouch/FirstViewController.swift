@@ -251,10 +251,10 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
     // view the work record
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showWorkRecordSegue" {
-            let temp = segue.destination as! UITableViewController
-            let viewController = temp as! WorkRecordTableViewController
+            let viewController = segue.destination as! TrackRecordAndGraphViewController
             viewController.workRecord = workRecord
             viewController.startDate = firstDateLogIn
+            viewController.units = "Time"
         }
     }
        
@@ -427,3 +427,9 @@ extension FirstViewController: UIGestureRecognizerDelegate {
     }
 }
 
+
+struct FirstViewController_Previews: PreviewProvider {
+    static var previews: some View {
+        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
+    }
+}
