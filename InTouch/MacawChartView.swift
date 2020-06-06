@@ -21,6 +21,7 @@ class MacawChartView: MacawView {
     var animations: [Animation] = []
     var textColor: Color?
     
+    // combines all the elements to make the chart
     private func createChart() {
         var items: [Node] = addYAxisItems() + addXAxisItems()
         items.append(createBars())
@@ -28,9 +29,10 @@ class MacawChartView: MacawView {
         self.node = Group(contents: items, place: .identity)
     }
     
+    // adds the interval lines and y-axis to the chart
     private func addYAxisItems() -> [Node] {
         let maxLines = 5
-        let lineInterval = Int(maxValue!/Double(maxLines))
+        let lineInterval = maxValue!/Double(maxLines)
         let yAxisHeight: Double = 200
         let lineSpacing: Double = maxValueLineHeight / Double(maxLines)
         
@@ -40,7 +42,7 @@ class MacawChartView: MacawView {
             let y = yAxisHeight - (Double(i) * lineSpacing)
             
             let valueLine = Line(x1: -5, y1: y, x2: lineWidth, y2: y).stroke(fill: textColor!.with(a: 0.10))
-            let valueText = Text(text: "\(i * lineInterval)", align: .max, baseline: .mid, place: .move(dx: -10, dy: y))
+            let valueText = Text(text: "\(Int((Double(i) * lineInterval).rounded()))", align: .max, baseline: .mid, place: .move(dx: -10, dy: y))
             valueText.fill = textColor
             
             newNodes.append(valueLine)
@@ -53,6 +55,7 @@ class MacawChartView: MacawView {
         return newNodes
     }
     
+    // adds the day labels and x-axis to the chart
     private func addXAxisItems() -> [Node] {
         let chartBaseY: Double = 200
         var newNodes: [Node] = []
@@ -74,6 +77,7 @@ class MacawChartView: MacawView {
         return newNodes
     }
     
+    // creates the bars for the chart and their animations
     private func createBars() -> Group {
         let fill = LinearGradient(degree: 90, from: Color.red, to: Color.red.with(a: 0.50))
         var items = [Group]()
@@ -89,7 +93,8 @@ class MacawChartView: MacawView {
         return items.group()
     }
     
-    func playAnimations(trackRecord: [Double], currColorMode: UIUserInterfaceStyle) {
+    // takes in data and creates a chart out of it
+    func playAnimations(trackRecord: [Double], goal: Double, currColorMode: UIUserInterfaceStyle) {
         backgroundColor = .clear
         if currColorMode == .light {
             textColor = Color.black
@@ -97,7 +102,7 @@ class MacawChartView: MacawView {
             textColor = Color.white
         }
         lastSevenDays = formatData(data: trackRecord)
-        maxValue = lastSevenDays!.max()
+        maxValue = max(goal, lastSevenDays!.max()!)
         dataDivisor = maxValue!/maxValueLineHeight
         adjustedData = lastSevenDays!.map({ $0 / dataDivisor!})
         
@@ -105,7 +110,7 @@ class MacawChartView: MacawView {
         animations.combine().play()
     }
     
-    
+    // only gets the last 7 days of data
     private func formatData(data: [Double]) -> [Double] {
         if data.count <= 7 {
             return data

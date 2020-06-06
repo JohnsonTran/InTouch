@@ -158,6 +158,7 @@ class HabitTableViewController: UITableViewController, HabitCellDelegate {
         return indexPath
     }
     
+    // MARK: - Navigation
     // view the track record
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "viewTrackRecordSegue" {
@@ -165,6 +166,7 @@ class HabitTableViewController: UITableViewController, HabitCellDelegate {
             viewController.workRecord = habitToView.recordTrack
             viewController.startDate = habitToView.startDate
             viewController.units = habitToView.units
+            viewController.goal = habitToView.goal
         }
     }
     
@@ -177,18 +179,7 @@ class HabitTableViewController: UITableViewController, HabitCellDelegate {
             tableView.reloadData()
         }
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
-
 }
 
 extension Date {
@@ -198,8 +189,6 @@ extension Date {
         // get day differences accounting for time zones
         guard let beg = Calendar.current.ordinality(of: comp, in: .era, for: date.addingTimeInterval(TimeInterval(timeZoneOffset))) else { return 0 }
         guard let end = Calendar.current.ordinality(of: comp, in: .era, for: self.addingTimeInterval(TimeInterval(timeZoneOffset))) else { return 0 }
-        print(beg)
-        print(end)
         return end - beg
     }
 }

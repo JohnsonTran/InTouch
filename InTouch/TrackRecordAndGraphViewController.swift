@@ -14,6 +14,7 @@ class TrackRecordAndGraphViewController: UIViewController, UITableViewDelegate, 
     var workRecord: [Double]!
     var startDate: Date!
     var units: String!
+    var goal: Double!
     
     @IBOutlet var chartView: MacawChartView!
     
@@ -22,7 +23,8 @@ class TrackRecordAndGraphViewController: UIViewController, UITableViewDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         chartView.contentMode = .scaleAspectFit
-        chartView.playAnimations(trackRecord: workRecord, currColorMode: self.traitCollection.userInterfaceStyle)
+        chartView.playAnimations(trackRecord: workRecord, goal: goal, currColorMode: self.traitCollection.userInterfaceStyle)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
