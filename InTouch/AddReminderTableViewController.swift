@@ -116,7 +116,15 @@ class AddReminderTableViewController: UITableViewController, UIPickerViewDelegat
             cellStack?.append(reminder.type!)
             editingReminder = true
         }
-        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        tableView.reloadData()
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
     }
     
     // helps dismiss the pickerView and update the cells of the table
@@ -146,7 +154,6 @@ class AddReminderTableViewController: UITableViewController, UIPickerViewDelegat
             }
             reminder?.type = freqField.text
         }
-        
     }
     
     // format the date input for the given frequency choice
@@ -158,7 +165,6 @@ class AddReminderTableViewController: UITableViewController, UIPickerViewDelegat
             dateFormatter.timeStyle = .short
             otDateField?.text = dateFormatter.string(from: datePicker.date)
             reminder?.time = datePicker.date
-            checkDate()
         } else if datePicker == self.timePicker {
             dateFormatter.timeStyle = .short
             timeField?.text = dateFormatter.string(from: datePicker.date)
@@ -174,35 +180,43 @@ class AddReminderTableViewController: UITableViewController, UIPickerViewDelegat
                 everyTimeField?.text = "\(hour) hr \(min) min"
             }
         }
-        
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
-        tableView.reloadData()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
-    
-    //MARK - UITextField methods
+    //MARK: - UITextField methods
     func checkName() {
         // disable save button if text field is empty
-        // TODO: make sure every textfield is not empty
-        let text = reminderTextField!.text ?? ""
-        if !text.isEmpty {
-            saveButton.isEnabled = true
-            reminder?.name = text
+        if cellStack!.count < 3 {
+            saveButton.isEnabled = false
+        } else {
+            let name = reminderTextField!.text ?? ""
+            let freq = freqField!.text ?? ""
+            if !name.isEmpty && !freq.isEmpty {
+                reminder?.name = name
+                let last = cellStack!.last
+                if last == "One Time" {
+                    let dateChoice = otDateField!.text ?? ""
+                    if !dateChoice.isEmpty {
+                        saveButton.isEnabled = true
+                    }
+                } else if last == "Daily" {
+                    let dateChoice = timeField!.text ?? ""
+                    if !dateChoice.isEmpty {
+                        saveButton.isEnabled = true
+                    }
+                } else if last == "While" {
+                    let dateChoice = everyTimeField!.text ?? ""
+                    if !dateChoice.isEmpty {
+                        saveButton.isEnabled = true
+                    }
+                }
+            }
         }
     }
     
     func checkDate() {
-        // disable save button if text field in the date picker has passed
+        // disable save button if date in text field has passed
         if cellStack!.last == "One Time" && NSDate().earlierDate(datePicker!.date) == datePicker!.date {
             saveButton.isEnabled = false
-            reminder?.time = datePicker!.date
         }
     }
     
@@ -213,30 +227,23 @@ class AddReminderTableViewController: UITableViewController, UIPickerViewDelegat
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         checkName()
-        
+        checkDate()
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         saveButton.isEnabled = false
     }
     
-    //    @IBAction func timeChanged(_ sender: UIDatePicker) {
-    //        checkDate()
-    //    }
-    
     @IBAction func cancel(_ sender: Any) {
-        
         dismiss(animated: true, completion: nil)
     }
     
     // MARK: - Navigation
-    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
         if let sender = sender as? UIBarButtonItem, sender === saveButton {
-            
             // update preexisting reminder
             var oldIdent = String()
             if reminder != nil {
@@ -245,8 +252,6 @@ class AddReminderTableViewController: UITableViewController, UIPickerViewDelegat
                 UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [reminder.identifier!])
                 PersistenceService.context.delete(reminder)
                 PersistenceService.saveContext()
-                
-                
             }
             reminder = Reminder(context: PersistenceService.context)
             PersistenceService.saveContext()
@@ -343,7 +348,7 @@ class AddReminderTableViewController: UITableViewController, UIPickerViewDelegat
         }
     }
     
-    //MARK - PickerView methods
+    //MARK: - PickerView methods
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -360,19 +365,16 @@ class AddReminderTableViewController: UITableViewController, UIPickerViewDelegat
         freqField.text = freqChoices[row]
     }
     
-    //MARK - TableView Methods
+    //MARK: - TableView Methods
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return cellStack!.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "titleAndName") as! TitleAndNameCell
             titleAndNameCell = cell

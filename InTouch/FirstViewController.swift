@@ -52,9 +52,8 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(pauseWhenBackground(noti:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground(noti:)), name: UIApplication.willEnterForegroundNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(willTerminate(noti:)), name: UIApplication.willTerminateNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIApplication.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIApplication.keyboardWillHideNotification, object: nil)
@@ -69,10 +68,25 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
         tap.delegate = self
         view.addGestureRecognizer(tap)
         
+        // check if the user is new and set the date they first logged in and workRecord, used to keep track of their daily work sessions
+        firstDateLogIn = UserDefaults.standard.object(forKey: "firstDateLogIn") as? Date
+        if firstDateLogIn == nil {
+            firstDateLogIn = Date()
+            UserDefaults.standard.set(firstDateLogIn, forKey: "firstDateLogIn")
+            workRecord = [0.0]
+            UserDefaults.standard.set(workRecord, forKey: "workRecord")
+            breakInterval = 60
+            UserDefaults.standard.set(breakInterval, forKey: "breakInterval")
+        }
+        
         //center.removeAllPendingNotificationRequests()
         everyTimePicker.datePickerMode = .countDownTimer
         everyTimePicker.addTarget(self, action: #selector(dateChanged(datePicker:)), for: .valueChanged)
         breakIntervalTextField.inputView = everyTimePicker
+        
+        // display the break interval
+        breakInterval = UserDefaults.standard.double(forKey: "breakInterval")
+        displayBreakInterval(breakTime: breakInterval)
         
         // add bottom line to break interval text field
         let bottomLine = CALayer()
@@ -81,21 +95,8 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
         breakIntervalTextField.borderStyle = UITextField.BorderStyle.none
         breakIntervalTextField.layer.addSublayer(bottomLine)
         
-        // display the break interval
-        breakInterval = UserDefaults.standard.double(forKey: "breakInterval")
-        if(breakInterval != 0) {
-            let hour: Int = Int(breakInterval) / 3600
-            let min: Int = (Int(breakInterval) % 3600) / 60
-            breakIntervalTextField.text = "Every "
-            if hour == 0 {
-                breakIntervalTextField.text! += "\(min) min"
-            } else {
-                breakIntervalTextField.text! += "\(hour) hr \(min) min"
-            }
-            everyTimePicker.countDownDuration = breakInterval
-        }
-        
         registerForNotification()
+        
         wasTerminated = false
         let isTimerStillRunning = UserDefaults.standard.bool(forKey: "isTimerRunning")
         if isTimerStillRunning {
@@ -108,20 +109,9 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
             if(oldTimer != newTimer) {
                 wasTerminated = true
             }
-            
         } else {
             counter = UserDefaults.standard.double(forKey: "counter")
             displayTime(timeInSecs: counter)
-        }
-        
-        // check if the user is new and set the date they first logged in and workRecord
-        // used to keep track of the work sessions
-        firstDateLogIn = UserDefaults.standard.object(forKey: "firstDateLogIn") as? Date
-        if firstDateLogIn == nil {
-            firstDateLogIn = Date()
-            UserDefaults.standard.set(firstDateLogIn, forKey: "firstDateLogIn")
-            workRecord = [0.0]
-            UserDefaults.standard.set(workRecord, forKey: "workRecord")
         }
         
         workRecord = UserDefaults.standard.object(forKey: "workRecord") as? [Double]
@@ -163,12 +153,6 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
         displayBreakInterval(breakTime: duration)
     }
     
-    // when the app enters the background, it saves the current date and time
-    @objc func pauseWhenBackground(noti: Notification) {
-        //let shared = UserDefaults.standard
-        //shared.set(Date(), forKey: "savedTime")
-    }
-    
     // when the app comes back up, it calculates the difference in time and updates
     // the time accounting for how much time has passed
     @objc func willEnterForeground(noti: Notification) {
@@ -176,11 +160,6 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
             (diffHrs, diffMins, diffSecs, diffNanosecs) = FirstViewController.getTimeDifference(startDate: savedDate)
             self.refresh(hours: diffHrs, mins: diffMins, secs: diffSecs, nanosecs: diffNanosecs)
         }
-    }
-    
-    // when the app is killed, save the counter, so it can update it when the user returns
-    @objc func willTerminate(noti: Notification) {
-        //UserDefaults.standard.set(counter, forKey: "counter")
     }
     
     // calculates the time difference when the user came back from the background
@@ -205,7 +184,6 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
                 // reset it so any time the user goes into background, the stopwatch doesn't get affected
                 wasTerminated = false
             }
-            
         }
     }
     
@@ -255,6 +233,7 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
             viewController.workRecord = workRecord
             viewController.startDate = firstDateLogIn
             viewController.units = "Time"
+            viewController.goal = 0.0
         }
     }
        
@@ -298,10 +277,8 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
                     } else {
                         self.sendNotification(date: latestDate.addingTimeInterval(breakInterval))
                     }
-                    
                     i += 1
                 }
-                
             }
             UserDefaults.standard.set(whileWorkIdent, forKey: "breakIdentifiers")
             
@@ -311,12 +288,11 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
             UserDefaults.standard.set(counter, forKey: "counter")
             timer.invalidate()
             startPauseButton.setTitle("Start", for: .normal)
-            
             removeAllBreakNotifications()
         }
-        
     }
     
+    // registers notifications to send in background
     func registerForNotification() {
         NotificationCenter.default.addObserver(forName: .sendBreakNotification, object: nil, queue: nil) { _ in
             if self.isTimerRunning {
@@ -424,12 +400,5 @@ extension FirstViewController: UIGestureRecognizerDelegate {
         //        }
         //        return true
         return (touch.view === self.view)
-    }
-}
-
-
-struct FirstViewController_Previews: PreviewProvider {
-    static var previews: some View {
-        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
     }
 }
