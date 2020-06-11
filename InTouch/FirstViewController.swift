@@ -233,7 +233,7 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
             viewController.workRecord = workRecord
             viewController.startDate = firstDateLogIn
             viewController.units = "Time"
-            viewController.goal = 0.0
+            viewController.goal = 1.0
         }
     }
        

@@ -256,9 +256,8 @@
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="116"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Habit Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lzn-wW-YUm">
-                                            <rect key="frame" x="156" y="11" width="103" height="24"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Habit Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lzn-wW-YUm">
+                                            <rect key="frame" x="155.5" y="11" width="103" height="24"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -291,7 +290,9 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="bottomMargin" secondItem="O9C-Yb-By3" secondAttribute="bottom" constant="7" id="JDK-Uj-Yyy"/>
+                                        <constraint firstItem="Snf-zk-wqY" firstAttribute="top" secondItem="lzn-wW-YUm" secondAttribute="bottom" constant="13" id="NvX-4E-FJD"/>
                                         <constraint firstItem="O9C-Yb-By3" firstAttribute="centerX" secondItem="Xm0-j0-3iu" secondAttribute="centerX" id="PgS-Dv-WlT"/>
+                                        <constraint firstItem="lzn-wW-YUm" firstAttribute="centerX" secondItem="Xm0-j0-3iu" secondAttribute="centerX" id="eSt-6l-zXm"/>
                                         <constraint firstItem="Snf-zk-wqY" firstAttribute="centerX" secondItem="Xm0-j0-3iu" secondAttribute="centerX" id="iPv-mc-qE5"/>
                                         <constraint firstItem="Snf-zk-wqY" firstAttribute="centerY" secondItem="Xm0-j0-3iu" secondAttribute="centerY" id="lFj-Vs-sPz"/>
                                     </constraints>
@@ -753,7 +754,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="UBS-h2-2KR"/>
+        <segue reference="9bN-aF-qKB"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="bell.fill" catalog="system" width="128" height="124"/>
