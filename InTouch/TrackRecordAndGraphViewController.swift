@@ -14,7 +14,7 @@ class TrackRecordAndGraphViewController: UIViewController, UITableViewDelegate, 
     var workRecord: [Double]!
     var startDate: Date!
     var units: String!
-    var goal: Double!
+    var goal: Double?
     
     @IBOutlet var chartView: MacawChartView!
     
@@ -23,8 +23,7 @@ class TrackRecordAndGraphViewController: UIViewController, UITableViewDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         chartView.contentMode = .scaleAspectFit
-        chartView.playAnimations(trackRecord: workRecord, goal: goal, currColorMode: self.traitCollection.userInterfaceStyle)
-        
+        chartView.playAnimations(trackRecord: workRecord, goal: goal ?? -1.0, currColorMode: self.traitCollection.userInterfaceStyle)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -59,7 +58,7 @@ class TrackRecordAndGraphViewController: UIViewController, UITableViewDelegate, 
         if units == "Time" {
             cell.progressLabel.text = displayTime(timeInSecs: workRecord[workRecord.count - 1 - indexPath.row])
         } else {
-            cell.progressLabel.text = "\(String(workRecord![workRecord!.count - 1 - indexPath.row])) \(units!)"
+            cell.progressLabel.text = "\(Int(workRecord![workRecord!.count - 1 - indexPath.row])) \(units!)"
         }
         cell.progressLabel.sizeToFit()
         cell.selectionStyle = .none

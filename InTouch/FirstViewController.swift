@@ -86,6 +86,7 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
         
         // display the break interval
         breakInterval = UserDefaults.standard.double(forKey: "breakInterval")
+        everyTimePicker.countDownDuration = breakInterval
         displayBreakInterval(breakTime: breakInterval)
         
         // add bottom line to break interval text field
@@ -233,7 +234,6 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
             viewController.workRecord = workRecord
             viewController.startDate = firstDateLogIn
             viewController.units = "Time"
-            viewController.goal = 1.0
         }
     }
        

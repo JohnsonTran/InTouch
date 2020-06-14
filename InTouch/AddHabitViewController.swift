@@ -37,7 +37,7 @@ class AddHabitViewController: UIViewController, UITextFieldDelegate {
         nameTextField.delegate = self
         unitsTextField.delegate = self
         goalTextField.delegate = self
-        goalTextField.keyboardType = .decimalPad
+        goalTextField.keyboardType = .numberPad
         
     }
     

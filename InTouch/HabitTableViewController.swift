@@ -95,7 +95,7 @@ class HabitTableViewController: UITableViewController, HabitCellDelegate {
         cell.habitNameLabel.text = habit.name
         cell.habitNameLabel.textAlignment = .center
         cell.habitNameLabel.sizeToFit()
-        cell.progressLabel.text = "\(habit.recordTrack![habit.recordTrack!.count - 1]) / \(habit.goal) \(habit.units!)"
+        cell.progressLabel.text = "\(Int(habit.recordTrack![habit.recordTrack!.count - 1])) / \(Int(habit.goal)) \(habit.units!)"
         cell.progressLabel.sizeToFit()
         cell.progressLabel.textAlignment = .center
         return cell
@@ -128,7 +128,7 @@ class HabitTableViewController: UITableViewController, HabitCellDelegate {
         
         alert.addTextField { (textField) in
             textField.placeholder = "Enter a value"
-            textField.keyboardType = .decimalPad
+            textField.keyboardType = .numberPad
         }
         
         alert.addAction(save)

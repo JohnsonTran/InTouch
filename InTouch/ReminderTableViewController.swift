@@ -210,9 +210,7 @@ class ReminderTableViewController: UITableViewController {
             }
             tableView.insertRows(at: [(newIndexPath as IndexPath)], with: .bottom)
             tableView.reloadData()
-            
         }
     }
-
 
 }
