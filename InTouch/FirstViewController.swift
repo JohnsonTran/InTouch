@@ -101,7 +101,7 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
         wasTerminated = false
         let isTimerStillRunning = UserDefaults.standard.bool(forKey: "isTimerRunning")
         if isTimerStillRunning {
-            //let startDate = UserDefaults.standard.object(forKey: "startDate") as! Date
+            let startDate = UserDefaults.standard.object(forKey: "startDate") as! Date
             counter = UserDefaults.standard.double(forKey: "counter")
             whileWorkIdent = UserDefaults.standard.object(forKey: "breakIdentifiers") as! [String]
             let oldTimer = UserDefaults.standard.string(forKey: "timerID")
@@ -109,6 +109,8 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
             let newTimer = UserDefaults.standard.string(forKey: "timerID")
             if(oldTimer != newTimer) {
                 wasTerminated = true
+                (diffHrs, diffMins, diffSecs, diffNanosecs) = FirstViewController.getTimeDifference(startDate: startDate)
+                self.refresh(hours: diffHrs, mins: diffMins, secs: diffSecs, nanosecs: diffNanosecs)
             }
         } else {
             counter = UserDefaults.standard.double(forKey: "counter")
@@ -119,7 +121,6 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
         // add days to the workRecord when it is a new day
         if let lastTimeLogIn = UserDefaults.standard.object(forKey: "workLastTimeLogIn") as? Date {
             let timeDiff = Date().interval(ofComponent: .day, fromDate: lastTimeLogIn)
-            print(timeDiff)
             var day = 0
             while day < timeDiff {
                 workRecord.append(0.0)
@@ -128,7 +129,6 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
             UserDefaults.standard.set(workRecord, forKey: "workRecord")
         }
         UserDefaults.standard.set(Date(), forKey: "workLastTimeLogIn")
-        print(workRecord!)
         
     }
     
@@ -154,8 +154,7 @@ class FirstViewController: UIViewController, UNUserNotificationCenterDelegate {
         displayBreakInterval(breakTime: duration)
     }
     
-    // when the app comes back up, it calculates the difference in time and updates
-    // the time accounting for how much time has passed
+    // when the app comes back up, it calculates the difference in time and updates the time
     @objc func willEnterForeground(noti: Notification) {
         if let savedDate = UserDefaults.standard.object(forKey: "startDate") as? Date {
             (diffHrs, diffMins, diffSecs, diffNanosecs) = FirstViewController.getTimeDifference(startDate: savedDate)
