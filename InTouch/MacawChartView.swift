@@ -100,7 +100,7 @@ class MacawChartView: MacawView {
         
         for i in 1...adjustedData!.count {
             let x = (Double(i-1) * 40 + 10)
-            let valueText = Text(text: dateFormatter.string(from: today.addingTimeInterval(TimeInterval((i-7) * 86400))), align: .mid, baseline: .mid, place: .move(dx: x, dy: chartBaseY + 15))
+            let valueText = Text(text: dateFormatter.string(from: today.addingTimeInterval(TimeInterval((i-adjustedData!.count) * 86400))), align: .mid, baseline: .mid, place: .move(dx: x, dy: chartBaseY + 15))
             valueText.fill = textColor
             newNodes.append(valueText)
         }
@@ -160,6 +160,8 @@ class MacawChartView: MacawView {
         }
         
         dataDivisor = maxValue!/maxValueLineHeight
+        // handles case where the user has no data in the work record since there is no goal
+        dataDivisor = dataDivisor == 0 ? 1 : dataDivisor
         adjustedData = lastSevenDays!.map({ $0 / dataDivisor!})
         
         createChart()
